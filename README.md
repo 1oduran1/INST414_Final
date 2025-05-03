@@ -59,3 +59,19 @@ A short description of the project.
 
 --------
 
+Project description:
+
+List all dependencies:
+    sklearn requires Python (>= 3.9), NumPy (>= 1.19.5), SciPy (>= 1.6.0), joblib (>= 1.2.0), threadpoolctl (>= 3.1.0)
+    pandas has optional dependencies numexpr (>= 2.8.4), bottleneck (>= 1.3.6), numba (>=0.56.4)
+        Improves speed, handling of large datasets
+
+
+Include instructions for:
+Setting up the environment
+
+Running the data processing pipeline
+
+Evaluating models:
+
+Reproducing results:
