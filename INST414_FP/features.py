@@ -25,8 +25,8 @@ def main(
     features = full_data.drop(columns=['Affordability'])
     labels = full_data['Affordability']
     
-    features.to_csv(PROCESSED_DATA_DIR / "features.csv", index=False)
-    labels.to_csv(PROCESSED_DATA_DIR / "labels.csv", index=False)
+    features.to_csv(output_path/ "features.csv", index=False)
+    labels.to_csv(output_path/ "labels.csv", index=False)
     logger.success("Features generation complete.")
     # -----------------------------------------
 
