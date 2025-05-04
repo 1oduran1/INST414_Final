@@ -1,0 +1,4 @@
+Date - The data for each month as of this date
+Region ID - Unique ID identifying each region
+Housing Type - For rows related to renting it was encoded with a 0. For datasets related to homeownership it was encoded as a 1.
+Affordable - If the row had an affordability proportion that was greater than 0.30, the value in the “Affordability” column equaled 0 to represent “unaffordable”. If the proportion was equal to or less than 0.30, the value equaled 1 to represent “affordable”
