@@ -1,30 +1,33 @@
 from pathlib import Path
-
 from loguru import logger
 from tqdm import tqdm
 import typer
+import pandas as pd
+import joblib
 
 from INST414_FP.config import MODELS_DIR, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 
-
 @app.command()
 def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    features_path: Path = PROCESSED_DATA_DIR / "test_features.csv",
+    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     model_path: Path = MODELS_DIR / "model.pkl",
-    predictions_path: Path = PROCESSED_DATA_DIR / "test_predictions.csv",
-    # -----------------------------------------
+    predictions_path: Path = PROCESSED_DATA_DIR / "predictions.csv",
 ):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Performing inference for model...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Inference complete.")
-    # -----------------------------------------
+    logger.info("Loading test features...")
+    X_test = pd.read_csv(features_path)
 
+    logger.info("Loading trained model...")
+    model = joblib.load(model_path)
+
+    logger.info("Generating predictions...")
+    y_pred = model.predict(X_test)
+
+    logger.info("Saving predictions...")
+    pd.Series(y_pred, name="Affordability").to_csv(predictions_path, index=False)
+
+    logger.success(f"Inference complete. Predictions saved to: {predictions_path}")
 
 if __name__ == "__main__":
     app()
