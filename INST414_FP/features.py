@@ -1,5 +1,20 @@
-from pathlib import Path
+"""
+This script loads a dataset, generates features and labels, and saves them to specified files.
 
+Arguments:
+input_path: The path to the CSV file containing the raw dataset. Default is 'Clean_Final_Full_Housing_Classification.csv'
+  located in the PROCESSED_DATA_DIR.
+output_path: The directory where the generated features and labels will be saved. Default is the PROCESSED_DATA_DIR.
+
+Output:
+features.csv: The features extracted from the dataset, saved to the specified output_path.
+labels.csv: The labels extracted from the dataset, saved to the specified output_path.
+
+Usage:
+Run the script from the command line using 'make features'.
+"""
+
+from pathlib import Path
 from loguru import logger
 from tqdm import tqdm
 import typer
