@@ -65,14 +65,21 @@ features: requirements
 	$(PYTHON_INTERPRETER) INST414_FP/features.py
 
 ## Train the model
-.PHONY: train_model
+.PHONY: train
 train_model:
-	$(PYTHON_INTERPRETER) INST414_FP/modeling/train.py --features-path $(FEATURES_PATH) --labels-path $(LABELS_PATH) --model-path $(MODEL_PATH)
+	$(PYTHON_INTERPRETER) INST414_FP/modeling/train.py \
+		--features-path $(FEATURES_PATH) \
+		--labels-path $(LABELS_PATH) \
+		--model-path $(MODEL_PATH) \
+		--model-type $(MODEL_TYPE)
+
 
 ## Run prediction script
 .PHONY: predict
 predict:
-	$(PYTHON_INTERPRETER) INST414_FP/modeling/predict.py
+	$(PYTHON_INTERPRETER) INST414_FP/modeling/predict.py \
+		--model-path $(MODEL_PATH) \
+		--predictions-path $(PREDICTIONS_PATH)
 
 ## Generate plots
 .PHONY: plots
