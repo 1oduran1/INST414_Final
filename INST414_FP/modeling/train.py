@@ -27,11 +27,11 @@ def main(
 
     logger.info("Training model with TimeSeriesSplit...")
     
-    for (train_idx, test_idx) in enumerate(tqdm(tscv.split(X), total=5)):
-        X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-        y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+    for train_idx, test_idx in tqdm(tscv.split(X), total=5):
+       X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+       y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
 
-        model.fit(X_train, y_train)
+    model.fit(X_train, y_train)
         
     logger.info(f"Saving model to {model_path}")
     joblib.dump(model, model_path)
