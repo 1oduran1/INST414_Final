@@ -41,7 +41,7 @@ def main(
 ):
     logger.info("Loading data...")
     X = pd.read_csv(features_path)
-    y = pd.read_csv(labels_path).squeeze()  # Convert to Series
+    y = pd.read_csv(labels_path).squeeze()
 
     logger.info("Loading model...")
     model = joblib.load(model_path)
