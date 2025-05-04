@@ -59,15 +59,25 @@ create_environment:
 data: requirements
 	$(PYTHON_INTERPRETER) INST414_FP/dataset.py
 
+## Generate features and labels from dataset
+.PHONY: features
+features: requirements
+	$(PYTHON_INTERPRETER) INST414_FP/features.py
+
 ## Train the model
 .PHONY: train_model
 train_model:
-	$(PYTHON_INTERPRETER) src/INST414_FP/models/train_model.py --features-path $(FEATURES_PATH) --labels-path $(LABELS_PATH) --model-path $(MODEL_PATH)
+	$(PYTHON_INTERPRETER) INST414_FP/modeling/train.py --features-path $(FEATURES_PATH) --labels-path $(LABELS_PATH) --model-path $(MODEL_PATH)
+
+## Run prediction script
+.PHONY: predict
+predict:
+	$(PYTHON_INTERPRETER) INST414_FP/modeling/predict.py
 
 ## Generate plots
-.PHONY: generate_plots
+.PHONY: plots
 generate_plots:
-	$(PYTHON_INTERPRETER) src/INST414_FP/visualization/plots.py --features-path $(FEATURES_PATH) --labels-path $(LABELS_PATH) --model-path $(MODEL_PATH) --output-path $(PLOTS_PATH)
+	$(PYTHON_INTERPRETER) INST414_FP/reports/figures/plots.py --features-path $(FEATURES_PATH) --labels-path $(LABELS_PATH) --model-path $(MODEL_PATH) --output-path $(PLOTS_PATH)
 
 ## Run all tasks
 .PHONY: all
