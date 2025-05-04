@@ -14,7 +14,7 @@ app = typer.Typer()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "Clean_Final_Full_Housing_Classification.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    output_path: Path = PROCESSED_DATA_DIR,
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
@@ -22,7 +22,9 @@ def main(
     
     full_data = pd.read_csv(input_path)
     
-    features = full_data.drop(columns=['Affordability'])
+    full_data.sort_values(by=['Date'])
+    
+    features = full_data.drop(columns=['Affordability', 'Date'])
     labels = full_data['Affordability']
     
     features.to_csv(output_path/ "features.csv", index=False)
