@@ -1,3 +1,21 @@
+"""
+This script loads test data, applies a trained machine learning model to generate predictions,
+and saves the results to a specified file.
+
+Arguments:
+features_path: The path to the CSV file containing the test features. Default is the 
+  features.csv located in the PROCESSED_DATA_DIR.
+model_path: The path to the saved trained model file. Default is the model.pkl located in
+  the MODELS_DIR.
+predictions_path: The path where the predictions will be saved as a CSV file. Default is 
+  predictions.csv located in the MODELS_DIR.
+
+Output:
+predictions_csv: The generated predictions are saved as a .csv file to the specified predictions_path.
+
+Usage:
+Run the script from the command line using 'make predict'"""
+
 from pathlib import Path
 from loguru import logger
 from tqdm import tqdm
