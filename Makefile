@@ -3,7 +3,7 @@
 #################################################################################
 
 PROJECT_NAME = INST414_Final
-PYTHON_VERSION = 3.12.9
+PYTHON_VERSION = 3.9
 PYTHON_INTERPRETER = python
 FEATURES_PATH = data/processed/features.csv
 LABELS_PATH = data/processed/labels.csv
