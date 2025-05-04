@@ -1,18 +1,32 @@
-from pathlib import Path
+"""
+This script evaluates a trained classification model using TimeSeriesSplit cross-validation,
+computes the average accuracy, and generates a confusion matrix heatmap for visualization.
 
+Arguments:
+features_path: Path to the CSV file containing feature data. Default is features.csv in PROCESSED_DATA_DIR.
+labels_path: Path to the CSV file containing label data. Default is labels.csv in PROCESSED_DATA_DIR.
+model_path: Path to the trained model file (.pkl). Default is model.pkl in MODELS_DIR.
+output_path: Path where the confusion matrix heatmap image will be saved. Default is confusion_matrix.png in FIGURES_DIR.
+
+Output:
+Confusion matrix heatmap plot (PNG format), visualizing model prediction performance.
+
+Usage:
+Run the script from the command line using make plots
+"""
+
+
+from pathlib import Path
 from loguru import logger
 from tqdm import tqdm
 import typer
-
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import joblib
-
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.metrics import accuracy_score, confusion_matrix
-
 from INST414_FP.config import FIGURES_DIR, PROCESSED_DATA_DIR, MODELS_DIR
 
 app = typer.Typer()
@@ -38,6 +52,7 @@ def main(
     scores = []
     all_preds = []
     all_true = []
+    
     for train_index, test_index in tqdm(tscv.split(X), total=tscv.get_n_splits()):
         X_train, X_test = X.iloc[train_index], X.iloc[test_index]
         y_train, y_test = y.iloc[train_index], y.iloc[test_index]
