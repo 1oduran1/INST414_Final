@@ -13,7 +13,7 @@ app = typer.Typer()
 def main(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     model_path: Path = MODELS_DIR / "model.pkl",
-    predictions_path: Path = PROCESSED_DATA_DIR / "predictions.csv",
+    predictions_path: Path = MODELS_DIR / "predictions.csv",
 ):
     logger.info("Loading test features...")
     X_test = pd.read_csv(features_path)
