@@ -5,13 +5,13 @@ import typer
 import pandas as pd
 import numpy as np
 
-from INST414_FP.config import PROCESSED_DATA_DIR, EXTERNAL_DATA_DIR
+from INST414_FP.config import PROCESSED_DATA_DIR, INTERIM_DATA_DIR
 
 app = typer.Typer()
 
 @app.command()
 def main(
-    input_path: Path = EXTERNAL_DATA_DIR / "Inner_Join_Affordability_Payment.csv",
+    input_path: Path = INTERIM_DATA_DIR / "Inner_Join_Affordability_Payment.csv",
     output_path: Path = PROCESSED_DATA_DIR / "Clean_Final_Full_Housing_Classification.csv",
 ):
     logger.info("Starting data cleaning and transformation process...")
