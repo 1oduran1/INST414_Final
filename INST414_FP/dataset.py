@@ -1,3 +1,20 @@
+"""
+This script cleans and transforms a housing dataset by filtering, handling missing values, computing derived columns,
+and saving the processed data to a specified file.
+
+Arguments:
+input_path: The path to the CSV file containing the joined interim dataset. Default is 
+  Inner_Join_Affordability_Payment.csv located in the INTERIM_DATA_DIR.
+output_path: The path where the cleaned and transformed dataset will be saved. Default is 
+  Clean_Final_Full_Housing_Classification.csv located in the PROCESSED_DATA_DIR.
+
+Output:
+Clean_Final_Full_Housing_Classification.csv: A cleaned and transformed version of the input dataset.
+
+Usage:
+Run the script from the command line using make data.
+"""
+
 from pathlib import Path
 from loguru import logger
 from tqdm import tqdm
