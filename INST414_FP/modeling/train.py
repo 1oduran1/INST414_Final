@@ -35,10 +35,10 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
+    features_path: Path = PROCESSED_DATA_DIR / "train_features.csv",
+    labels_path: Path = PROCESSED_DATA_DIR / "train_labels.csv",
     model_path: Path = MODELS_DIR / "model.pkl",
-    model_type: str = "xgboost" or "random_forest" or "both",
+    model_type: str = "both",
 ):
     logger.info("Loading data...")
     X = pd.read_csv(features_path)
