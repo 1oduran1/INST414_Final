@@ -30,22 +30,37 @@ app = typer.Typer()
 @app.command()
 def main(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
-    predictions_path: Path = MODELS_DIR / "predictions.csv",
+    model_path: Path = MODELS_DIR,
+    predictions_path: Path = MODELS_DIR,
+    model_type: str = "xgboost" or "random_forest" or "both",
 ):
+  
     logger.info("Loading test features...")
     X_test = pd.read_csv(features_path)
 
     logger.info("Loading trained model...")
-    model = joblib.load(model_path)
+    if model_type not in ["xgboost", "random_forest", "both"]:
+        raise ValueError(f"Unsupported model type: {model_type}")
+    
+    models = {
+        "xgboost": model_path / "model_xgboost.pkl",
+        "random_forest": model_path / "model_random_forest.pkl",
+    }
+    
+    selected_models = models.keys() if model_type == "both" else [model_type]
+    
+    for m_type in selected_models:
+        model = models[m_type]
+        model = joblib.load(selected_models)
 
-    logger.info("Generating predictions...")
-    y_pred = model.predict(X_test)
+        logger.info("Generating predictions...")
+        y_pred = model.predict(X_test)
 
-    logger.info("Saving predictions...")
-    pd.Series(y_pred, name="Affordability").to_csv(predictions_path, index=False)
+        logger.info("Saving predictions...")
+        pd.Series(y_pred, name="Affordability").to_csv(predictions_path, index=False)
 
-    logger.success(f"Inference complete. Predictions saved to: {predictions_path}")
+        save_path = predictions_path / f"predictions_{m_type}.csv"
+        logger.success(f"Inference complete. Predictions saved to: {save_path}")
 
 if __name__ == "__main__":
     app()
