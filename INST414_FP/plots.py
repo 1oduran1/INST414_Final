@@ -34,16 +34,27 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    predictions_path: Path = PROCESSED_DATA_DIR / "predictions.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
-    output_path: Path = FIGURES_DIR / "confusion_matrix.png",
+    labels_path: Path = PROCESSED_DATA_DIR,
+    predictions_path: Path = PROCESSED_DATA_DIR,
+    output_path: Path = FIGURES_DIR,
+    model_type: str = "both",
 ):
+    
+    logger.info("Loading trained model...")
+    models = ["xgboost", "random_forest"]
+    
+    if model_type not in models:
+        raise ValueError(f"Unsupported model type: {model_type}")
+      
+    selected_models = models if model_type == "both" else [model_type]
+    
     logger.info("Loading data...")
-    all_preds = pd.read_csv(predictions_path).squeeze()
-    all_true = pd.read_csv(labels_path).squeeze()
+    for m_type in selected_models:
+        all_preds = pd.read_csv(predictions_path/f"predictions_{m_type}.csv").squeeze()  # Make it a Series
+        all_true = pd.read_csv(labels_path/f"holdout_labels.csv").squeeze()
+    
     logger.info("Generating confusion matrix...")
-
+    score = accuracy_score(all_true, all_preds)
     cm = confusion_matrix(all_true, all_preds)
     cm_percent = cm / cm.sum(axis=1, keepdims=True)
 
@@ -54,7 +65,7 @@ def main(
     sns.heatmap(cm_percent, annot=labels, fmt='', cmap='Blues',
                 xticklabels=["Pred 0", "Pred 1"],
                 yticklabels=["True 0", "True 1"])
-    plt.title(f'Confusion Matrix (TimeSeriesSplit)\nAvg Accuracy: {average_score:.2%}')
+    plt.title(f'Confusion Matrix (TimeSeriesSplit)\nAvg Accuracy: {score:.2%}')
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.tight_layout()
