@@ -29,14 +29,16 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    features_path: Path = PROCESSED_DATA_DIR / "holdout_features.csv",
+    labels_path: Path = PROCESSED_DATA_DIR / "holdout_labels.csv",
     model_path: Path = MODELS_DIR,
     predictions_path: Path = MODELS_DIR,
     model_type: str = "both",
 ):
   
     logger.info("Loading test features...")
-    features = pd.read_csv(features_path)
+    X = pd.read_csv(features_path)
+    y = pd.read_csv(labels_path).squeeze()  # Make it a Series
 
     logger.info("Loading trained model...")
     if model_type not in ["xgboost", "random_forest", "both"]:
@@ -53,10 +55,10 @@ def main(
         model = joblib.load(models[m_type])
 
         logger.info("Generating predictions...")
-        y_pred = model.predict(X_test)
+        y_pred = model.predict(X)
 
         logger.info("Saving predictions...")
-        pd.Series(y_pred, name="Affordability").to_csv(predictions_path, index=False)
+        pd.Series(y_pred, name="Affordability Predictions").to_csv(predictions_path, index=False)
 
         save_path = predictions_path / f"predictions_{m_type}.csv"
         logger.success(f"Inference complete. Predictions saved to: {save_path}")
