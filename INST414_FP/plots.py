@@ -34,37 +34,15 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
+    predictions_path: Path = PROCESSED_DATA_DIR / "predictions.csv",
     model_path: Path = MODELS_DIR / "model.pkl",
     output_path: Path = FIGURES_DIR / "confusion_matrix.png",
 ):
     logger.info("Loading data...")
-    X = pd.read_csv(features_path)
-    y = pd.read_csv(labels_path).squeeze()
-
-    logger.info("Loading model...")
-    model = joblib.load(model_path)
-
-    logger.info("Running TimeSeriesSplit evaluation and generating confusion matrix...")
-
-    tscv = TimeSeriesSplit()
-    scores = []
-    all_preds = []
-    all_true = []
-    
-    for train_index, test_index in tqdm(tscv.split(X), total=tscv.get_n_splits()):
-        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        scores.append(accuracy_score(y_test, y_pred))
-
-        all_preds.extend(y_pred)
-        all_true.extend(y_test)
-
-    average_score = np.mean(scores)
-    logger.info(f"Average accuracy score: {average_score:.4f}")
+    all_preds = pd.read_csv(predictions_path).squeeze()
+    all_true = pd.read_csv(labels_path).squeeze()
+    logger.info("Generating confusion matrix...")
 
     cm = confusion_matrix(all_true, all_preds)
     cm_percent = cm / cm.sum(axis=1, keepdims=True)

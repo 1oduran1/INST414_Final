@@ -32,11 +32,11 @@ def main(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     model_path: Path = MODELS_DIR,
     predictions_path: Path = MODELS_DIR,
-    model_type: str = "xgboost" or "random_forest" or "both",
+    model_type: str = "both",
 ):
   
     logger.info("Loading test features...")
-    X_test = pd.read_csv(features_path)
+    features = pd.read_csv(features_path)
 
     logger.info("Loading trained model...")
     if model_type not in ["xgboost", "random_forest", "both"]:
@@ -50,8 +50,7 @@ def main(
     selected_models = models.keys() if model_type == "both" else [model_type]
     
     for m_type in selected_models:
-        model = models[m_type]
-        model = joblib.load(selected_models)
+        model = joblib.load(models[m_type])
 
         logger.info("Generating predictions...")
         y_pred = model.predict(X_test)
