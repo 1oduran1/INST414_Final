@@ -43,8 +43,8 @@ def main(
         raise ValueError(f"Unsupported model type: {model_type}")
     
     models = {
-        "xgboost": model_path / "model_xgboost.pkl",
-        "random_forest": model_path / "model_random_forest.pkl",
+        "xgboost": (f'{model_path}/model_xgboost.pkl'),
+        "random_forest": (f'{model_path}/model_random_forest.pkl'),
     }
     
     selected_models = models.keys() if model_type == "both" else [model_type]
@@ -56,9 +56,9 @@ def main(
         y_pred = model.predict(X)
 
         logger.info("Saving predictions...")
-        pd.Series(y_pred, name="Affordability Predictions").to_csv(predictions_path, index=False)
-
         save_path = predictions_path / f"predictions_{m_type}.csv"
+        pd.Series(y_pred, name="Affordability Predictions").to_csv(save_path, index=False)
+
         logger.success(f"Inference complete. Predictions saved to: {save_path}")
 
 if __name__ == "__main__":

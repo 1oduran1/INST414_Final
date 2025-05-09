@@ -12,7 +12,7 @@ TRAIN_LABELS_PATH = data/processed/train_labels.csv
 TEST_LABELS_PATH = data/processed/holdout_features.csv
 
 MODEL_PATH = models
-PREDICTIONS_PATH = data/processed/test_predictions.csv
+MODEL_TYPE = both
 
 PLOTS_PATH = figures/plot.png
 
@@ -81,19 +81,19 @@ train:
 ## Run prediction script
 .PHONY: predict
 predict:
-	$(PYTHON_INTERPRETER) INST414_FP/modeling/predict.py \
-		--features-path $(FEATURES_PATH) \
+	$(PYTHON_INTERPRETER) -m INST414_FP.modeling.predict \
+		--features-path $(TEST_FEATURES_PATH) \
 		--model-path $(MODEL_PATH) \
-		--predictions-path $(PREDICTIONS_PATH) \
+		--predictions-path $(MODEL_PATH) \
 		--model-type $(MODEL_TYPE)
 
 ## Generate plots
 .PHONY: plots
 generate_plots:
 	$(PYTHON_INTERPRETER) INST414_FP/reports/figures/plots.py \ 
-		--features-path $(TEST_FEATURES_PATH) \ 
-		--labels-path $(TESTLABELS_PATH) \ 
-		--model-path $(MODEL_PATH) \ 
+		--features-path $(TEST_FEATURES_PATH) \
+		--labels-path $(TEST_LABELS_PATH) \
+		--model-path $(MODEL_PATH) \
 		--output-path $(PLOTS_PATH)
 
 ## Run all tasks
