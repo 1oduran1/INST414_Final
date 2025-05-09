@@ -1,6 +1,7 @@
 ipython
 jupyterlab
 loguru
+libomp
 matplotlib
 notebook
 numpy
@@ -10,6 +11,7 @@ pytest
 python-dotenv
 ruff
 scikit-learn
+seaborn
 tqdm
 typer
 -e .
