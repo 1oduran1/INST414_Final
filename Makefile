@@ -5,10 +5,15 @@
 PROJECT_NAME = INST414_Final
 PYTHON_VERSION = 3.9
 PYTHON_INTERPRETER = python
-FEATURES_PATH = data/processed/features.csv
-LABELS_PATH = data/processed/labels.csv
-MODEL_PATH = models/model.pkl
+
+TRAIN_FEATURES_PATH = data/processed/train_features.csv
+TEST_FEATURES_PATH = data/processed/holdout_features.csv
+TRAIN_LABELS_PATH = data/processed/train_labels.csv
+TEST_LABELS_PATH = data/processed/holdout_features.csv
+
+MODEL_PATH = models
 PREDICTIONS_PATH = data/processed/test_predictions.csv
+
 PLOTS_PATH = figures/plot.png
 
 #################################################################################
@@ -66,10 +71,10 @@ features: requirements
 
 ## Train the model
 .PHONY: train
-train_model:
+train:
 	$(PYTHON_INTERPRETER) INST414_FP/modeling/train.py \
-		--features-path $(FEATURES_PATH) \
-		--labels-path $(LABELS_PATH) \
+		--features-path $(TRAIN_FEATURES_PATH) \
+		--labels-path $(TRAIN_LABELS_PATH) \
 		--model-path $(MODEL_PATH) \
 		--model-type $(MODEL_TYPE)
 
@@ -85,7 +90,11 @@ predict:
 ## Generate plots
 .PHONY: plots
 generate_plots:
-	$(PYTHON_INTERPRETER) INST414_FP/reports/figures/plots.py --features-path $(FEATURES_PATH) --labels-path $(LABELS_PATH) --model-path $(MODEL_PATH) --output-path $(PLOTS_PATH)
+	$(PYTHON_INTERPRETER) INST414_FP/reports/figures/plots.py \ 
+		--features-path $(TEST_FEATURES_PATH) \ 
+		--labels-path $(TESTLABELS_PATH) \ 
+		--model-path $(MODEL_PATH) \ 
+		--output-path $(PLOTS_PATH)
 
 ## Run all tasks
 .PHONY: all
