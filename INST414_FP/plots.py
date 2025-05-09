@@ -35,7 +35,7 @@ app = typer.Typer()
 @app.command()
 def main(
     labels_path: Path = PROCESSED_DATA_DIR,
-    predictions_path: Path = PROCESSED_DATA_DIR,
+    predictions_path: Path = MODELS_DIR,
     output_path: Path = FIGURES_DIR,
     model_type: str = "both",
 ):

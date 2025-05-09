@@ -77,8 +77,10 @@ train_model:
 .PHONY: predict
 predict:
 	$(PYTHON_INTERPRETER) INST414_FP/modeling/predict.py \
+		--features-path $(FEATURES_PATH) \
 		--model-path $(MODEL_PATH) \
-		--predictions-path $(PREDICTIONS_PATH)
+		--predictions-path $(PREDICTIONS_PATH) \
+		--model-type $(MODEL_TYPE)
 
 ## Generate plots
 .PHONY: plots

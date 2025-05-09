@@ -30,15 +30,13 @@ app = typer.Typer()
 @app.command()
 def main(
     features_path: Path = PROCESSED_DATA_DIR / "holdout_features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "holdout_labels.csv",
     model_path: Path = MODELS_DIR,
     predictions_path: Path = MODELS_DIR,
     model_type: str = "both",
 ):
   
     logger.info("Loading test features...")
-    X = pd.read_csv(features_path)
-    y = pd.read_csv(labels_path).squeeze()  # Make it a Series
+    X = pd.read_csv(features_path)  # Make it a Series
 
     logger.info("Loading trained model...")
     if model_type not in ["xgboost", "random_forest", "both"]:
