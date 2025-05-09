@@ -37,9 +37,13 @@ app = typer.Typer()
 def main(
     features_path: Path = PROCESSED_DATA_DIR / "train_features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "train_labels.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
+    model_path: Path = MODELS_DIR,
     model_type: str = "both",
 ):
+  
+    model_path = Path(model_path)
+    model_path.mkdir(parents=True, exist_ok=True)
+    
     logger.info("Loading data...")
     X = pd.read_csv(features_path)
     y = pd.read_csv(labels_path).squeeze()  # Make it a Series
@@ -62,10 +66,9 @@ def main(
         for train_idx, test_idx in tqdm(tscv.split(X), total=5):
             X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
             y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+            model.fit(X_train, y_train)
 
-        model.fit(X_train, y_train)
-
-        save_path = model_path / f"model_{m_type}.pkl"
+        save_path = (model_path / f"model_{m_type}.pkl")
         logger.info(f"Saving {m_type} model to {save_path}")
         joblib.dump(model, save_path)
 
