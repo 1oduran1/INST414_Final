@@ -47,7 +47,6 @@ def main(
         logger.info(f"Saved {name} to {output_path/ f'{name}_features.csv'}")
         labels.to_csv(output_path/ f"{name}_labels.csv", index=False)
         logger.info(f"Saved {name} to {output_path/ f'{name}_labels.csv'}")
-
     # -----------------------------------------
 
 
