@@ -38,35 +38,38 @@ def main(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     model_path: Path = MODELS_DIR / "model.pkl",
-    model_type: str = "xgboost" or "random_forest",
+    model_type: str = "xgboost" or "random_forest" or "both",
 ):
     logger.info("Loading data...")
     X = pd.read_csv(features_path)
     y = pd.read_csv(labels_path).squeeze()  # Make it a Series
 
-
-    if model_type == "random_forest":
-        model = RandomForestClassifier(n_estimators=700, random_state=0)
-    elif model_type == "xgboost":
-        model = XGBClassifier(n_estimators=1200, max_depth=3, learning_rate=1, random_state=0)
-    else:
+    models = {
+        "xgboost": XGBClassifier(n_estimators=1200, max_depth=3, learning_rate=1, random_state=0),
+        "random_forest": RandomForestClassifier(n_estimators=700, random_state=0),
+    }
+    
+    if model_type not in ["xgboost", "random_forest", "both"]:
         raise ValueError(f"Unsupported model type: {model_type}")
+      
+    selected_models = models.keys() if model_type == "both" else [model_type]
     
-    tscv = TimeSeriesSplit(n_splits=5)
+    for m_type in selected_models:
+        model = models[m_type]
+        tscv = TimeSeriesSplit(n_splits=5)
 
-    logger.info("Training model with TimeSeriesSplit...")
-    
-    for train_idx, test_idx in tqdm(tscv.split(X), total=5):
-       X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-       y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+        logger.info(f"Training {m_type} model with TimeSeriesSplit...")
+        for train_idx, test_idx in tqdm(tscv.split(X), total=5):
+            X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+            y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
 
-    model.fit(X_train, y_train)
-        
-    logger.info(f"Saving model to {model_path}")
-    joblib.dump(model, model_path)
-    
+        model.fit(X_train, y_train)
 
-    logger.success("Model training complete and saved.")
+        save_path = model_path / f"model_{m_type}.pkl"
+        logger.info(f"Saving {m_type} model to {save_path}")
+        joblib.dump(model, save_path)
+
+    logger.success("Selected model(s) trained and saved.")
 
 if __name__ == "__main__":
     app()
