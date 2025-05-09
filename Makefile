@@ -73,7 +73,6 @@ train_model:
 		--model-path $(MODEL_PATH) \
 		--model-type $(MODEL_TYPE)
 
-
 ## Run prediction script
 .PHONY: predict
 predict:
