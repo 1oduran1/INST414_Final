@@ -39,7 +39,7 @@ def main(
     datasets = {'train': pd.read_csv(input_path/'clean_training_data.csv'),
                 'holdout': pd.read_csv(input_path/'clean_holdout_data.csv')}
 
-    for name, data in datasets:
+    for name, data in datasets.items():
         data.sort_values(by=['Date'])
         features = data.drop(columns=['Affordability', 'Date'])
         labels = data['Affordability']
