@@ -69,14 +69,15 @@ List all dependencies:
 
 Include instructions for:
 Setting up the environment:
-    Set up a new environment using Python 3.9. Install sklearn and pandas. 
+    Clone GitHub repository to computer. Set up a new environment using Python 3.9.
+    Run "make requirements" to install all dependencies.
 
 Running the data processing pipeline:
     Run "make data" in the terminal to process the dataset "Inner_Join_Affordability_Payment.csv" from the interim data folder 
-    into "Clean_Final_Full_Housing_Classification.csv" which will be in the processed data folder. 
+    into "clean_training_data.csv" and "clean_holdout_data.csv" which will be in the processed data folder. 
 
-    Run "make features" in the terminal to split "Clean_Final_Full_Housing_Classification.csv" into a dataset containing features and 
-    another containing labels. Both datasets will also be in the processed data folder.
+    Run "make features" in the terminal to split "clean_training_data.csv" and "clean_holdout_data.csv" into datasets containing features and 
+    others containing labels. Both datasets will also be in the processed data folder.
 
 Training models: 
     Run "make train" in the terminal. Specify the argument make train MODEL_TYPE=
@@ -86,9 +87,12 @@ Training models:
 Evaluating models:
     Run "make predict" in the terminal. Specify the argument make train MODEL_TYPE=
     Options for the MODEL_TYPE argument include "xgboost" or "random_forest" or "both" to train one or both models
-    The model.pkl files get saved to the models folder. Default is "both".
+    The prediction csv files get saved to the models folder. Default is "both".
 
-    Run "make plots"
+    Run "make plots" in the terminal to generate confusion matrices for the holdout dataset. 
+    Specify the argument make train MODEL_TYPE=
+    Options for the MODEL_TYPE argument include "xgboost" or "random_forest" or "both" to train one or both models.
+    Default is "both"
 
 Reproducing results:
-    Run "make all" to run 
+    Run "make all" to run the pipeline from the beginning to end.
