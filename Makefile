@@ -9,12 +9,12 @@ PYTHON_INTERPRETER = python
 TRAIN_FEATURES_PATH = data/processed/train_features.csv
 TEST_FEATURES_PATH = data/processed/holdout_features.csv
 TRAIN_LABELS_PATH = data/processed/train_labels.csv
-TEST_LABELS_PATH = data/processed/holdout_features.csv
+TEST_LABELS_PATH = data/processed/holdout_labels.csv
 
 MODEL_PATH = models
 MODEL_TYPE = both
 
-PLOTS_PATH = figures/plot.png
+PLOTS_PATH = reports/figures
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -89,12 +89,12 @@ predict:
 
 ## Generate plots
 .PHONY: plots
-generate_plots:
-	$(PYTHON_INTERPRETER) INST414_FP/reports/figures/plots.py \ 
-		--features-path $(TEST_FEATURES_PATH) \
+plots:
+	$(PYTHON_INTERPRETER) INST414_FP/plots.py \
 		--labels-path $(TEST_LABELS_PATH) \
-		--model-path $(MODEL_PATH) \
-		--output-path $(PLOTS_PATH)
+		--predictions-path $(MODEL_PATH) \
+		--output-path $(PLOTS_PATH) \
+		--model-type $(MODEL_TYPE)
 
 ## Run all tasks
 .PHONY: all

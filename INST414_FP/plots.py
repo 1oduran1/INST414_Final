@@ -25,7 +25,6 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import joblib
-from sklearn.model_selection import TimeSeriesSplit
 from sklearn.metrics import accuracy_score, confusion_matrix
 from INST414_FP.config import FIGURES_DIR, PROCESSED_DATA_DIR, MODELS_DIR
 
@@ -34,45 +33,41 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    labels_path: Path = PROCESSED_DATA_DIR,
+    labels_path: Path = PROCESSED_DATA_DIR/"holdout_labels.csv",
     predictions_path: Path = MODELS_DIR,
     output_path: Path = FIGURES_DIR,
     model_type: str = "both",
 ):
     
     logger.info("Loading trained model...")
-    models = ["xgboost", "random_forest"]
-    
-    if model_type not in models:
-        raise ValueError(f"Unsupported model type: {model_type}")
       
-    selected_models = models if model_type == "both" else [model_type]
+    selected_models = ["xgboost", "random_forest"] if model_type == "both" else [model_type]
     
     logger.info("Loading data...")
     for m_type in selected_models:
         all_preds = pd.read_csv(predictions_path/f"predictions_{m_type}.csv").squeeze()  # Make it a Series
-        all_true = pd.read_csv(labels_path/f"holdout_labels.csv").squeeze()
+        all_true = pd.read_csv(labels_path).squeeze()
     
-    logger.info("Generating confusion matrix...")
-    score = accuracy_score(all_true, all_preds)
-    cm = confusion_matrix(all_true, all_preds)
-    cm_percent = cm / cm.sum(axis=1, keepdims=True)
+        logger.info("Generating confusion matrix...")
+        score = accuracy_score(all_true, all_preds)
+        cm = confusion_matrix(all_true, all_preds)
+        cm_percent = cm / cm.sum(axis=1, keepdims=True)
 
-    labels = [[f"{count}\n({percent:.1%})" for count, percent in zip(row_c, row_p)]
+        labels = [[f"{count}\n({percent:.1%})" for count, percent in zip(row_c, row_p)]
               for row_c, row_p in zip(cm, cm_percent)]
 
-    plt.figure(figsize=(5, 4))
-    sns.heatmap(cm_percent, annot=labels, fmt='', cmap='Blues',
-                xticklabels=["Pred 0", "Pred 1"],
-                yticklabels=["True 0", "True 1"])
-    plt.title(f'Confusion Matrix (TimeSeriesSplit)\nAvg Accuracy: {score:.2%}')
-    plt.xlabel('Predicted')
-    plt.ylabel('True')
-    plt.tight_layout()
+        plt.figure(figsize=(5, 4))
+        sns.heatmap(cm_percent, annot=labels, fmt='', cmap='Blues',
+                    xticklabels=["Pred 0", "Pred 1"],
+                    yticklabels=["True 0", "True 1"])
+        plt.title(f'{m_type} Confusion Matrix Accuracy: {score:.2%}')
+        plt.xlabel('Predicted')
+        plt.ylabel('True')
+        plt.tight_layout()
 
-    logger.info(f"Saving confusion matrix to {output_path}...")
-    plt.savefig(output_path)
-    logger.success("Plot generation complete.")
+        logger.info(f"Saving confusion matrix to {output_path}...")
+        plt.savefig(output_path/f"confusion_matrix_{m_type}.png")
+        logger.success("Plot generation complete.")
 
 
 if __name__ == "__main__":
