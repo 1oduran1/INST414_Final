@@ -98,7 +98,8 @@ plots:
 
 ## Run all tasks
 .PHONY: all
-all: train_model generate_plots
+all: data features train predict plots
+	@echo "All tasks completed successfully!"
 
 #################################################################################
 # Self Documenting Commands                                                     #

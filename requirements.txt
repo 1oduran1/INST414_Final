@@ -1,7 +1,6 @@
 ipython
 jupyterlab
 loguru
-libomp
 matplotlib
 notebook
 numpy
